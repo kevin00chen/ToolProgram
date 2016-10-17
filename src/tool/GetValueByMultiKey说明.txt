@@ -1,0 +1,43 @@
+这段代码主要用于解析Map嵌套，以及直接从Json字符串中获取指定值。
+
+示例代码中的json字符串，格式后的内容如下：
+
+{
+  "glossary": {
+    "title": "example glossary",
+    "GlossDiv": {
+      "title": "S",
+      "GlossList": {
+        "GlossEntry": {
+          "ID": "SGML",
+          "SortAs": "SGML",
+          "GlossTerm": "Standard Generalized Markup Language",
+          "Acronym": "SGML",
+          "Abbrev": "ISO 8879:1986",
+          "GlossDef": {
+            "para": "A meta-markup language, used to create markup languages such as DocBook.",
+            "GlossSeeAlso": [
+              "GML",
+              "XML"
+            ]
+          },
+          "GlossSee": "markup"
+        }
+      }
+    }
+  }
+}
+
+
+想要获取指定key的内容，可以使用组合key的方式，如下
+（1）getValueByMutiKey(map, "glossary")的结果：
+Map(title -> example glossary, GlossDiv -> Map(title -> S, GlossList -> Map(GlossEntry -> Map(ID -> SGML, Acronym -> SGML, GlossDef -> Map(para -> A meta-markup language, used to create markup languages such as DocBook., GlossSeeAlso -> List(GML, XML)), SortAs -> SGML, GlossSee -> markup, Abbrev -> ISO 8879:1986, GlossTerm -> Standard Generalized Markup Language))))
+
+（2）getValueByMutiKey(map, "glossary.GlossDiv.title")的结果如下：
+S
+
+（3）getValueByMutiKey(map, "glossary.GlossDiv.GlossList.GlossEntry.GlossTerm")的结果如下：
+Standard Generalized Markup Language
+
+（4）getValueByMutiKey(map, "glossary.GlossDiv.GlossList.GlossEntry.GlossDef.GlossSeeAlso")的结果如下：
+List(GML, XML)
