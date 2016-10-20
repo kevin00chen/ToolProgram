@@ -1,7 +1,6 @@
 package tool
 
-import java.util
-
+import scala.collection.mutable.ListBuffer
 import scala.util.parsing.json.JSON
 
 /**
@@ -26,9 +25,9 @@ object GetValueByMultiKey {
           case Some(value: Map[_, _]) => getValueFromMap(value.asInstanceOf[Map[String, Any]], keyList.drop(1))
           case Some(valueList: List[_]) if keyList.length == 1 => valueList
           case Some(valueList: List[_]) => {
-            val list = new util.ArrayList[AnyRef]()
-            for (value <- valueList.asInstanceOf[List[Map[String, Any]]]) list.add(getValueFromMap(value, keyList.drop(1)))
-            list
+            val list = new ListBuffer[AnyRef]()
+            for (value <- valueList.asInstanceOf[List[Map[String, Any]]]) list +=(getValueFromMap(value, keyList.drop(1)))
+            list.toList
           }
           case Some(value: String) => value
           case None => ""
