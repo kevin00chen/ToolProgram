@@ -26,7 +26,7 @@ object GetValueByMultiKey {
           case Some(valueList: List[_]) if keyList.length == 1 => valueList
           case Some(valueList: List[_]) => {
             val list = new ListBuffer[AnyRef]()
-            for (value <- valueList.asInstanceOf[List[Map[String, Any]]]) list +=(getValueFromMap(value, keyList.drop(1)))
+            for (value <- valueList.asInstanceOf[List[Map[String, Any]]]) list += (getValueFromMap(value, keyList.drop(1)))
             list.toList
           }
           case Some(value: String) => value
