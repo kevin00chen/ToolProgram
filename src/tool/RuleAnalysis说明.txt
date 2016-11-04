@@ -1,0 +1,74 @@
+比如获取到一批数据，需要比对这批数据是否符合某些规则：
+id  value
+1   10
+2   23
+3   23
+4   13
+
+首先根据这些数据，生成一个List[Elements]序列，
+然后设置规则，比如 d1+d4=d3, d2=d3, d1+13=d2等等，这个类就是用于实现这些规则比较的
+
+
+示例一、简单比对
+规则：d3=d1
+数据：List(Elements(1,4), Elements(3,9))
+核对结果为： false
+
+
+示例二、四则运算比对
+规则：d3=d1+5
+数据：List(Elements(1,4), Elements(3,9))
+核对结果为： true
+
+规则：d3=(d1+5)*2
+数据：List(Elements(1,4), Elements(3,18))
+核对结果为： true
+
+规则：d3=d1+d2
+数据：List(Elements(1,4), Elements(2,5), Elements(3,9))
+核对结果为： true
+
+注意在d3=d1, d3=d1+d2这种形式的规则中，d1,d2,d3都只能出现一条，多条的时候会返回false，因为不能确定需要核对的是哪一条
+示例四、
+规则：d3=d1
+数据：List(Elements(1,4), Elements(1,5), Elements(3,9))
+核对结果为： false
+
+但是运行求和操作暂时以sum:来标识
+示例五、
+规则：d3=sum:d1
+数据：List(Elements(1,4), Elements(1,5), Elements(3,9))
+核对结果为： true
+
+以上这些数值类型的规则，可以自由组合，并进行复杂的四则运算
+
+
+示例六、字符比较
+规则：d3=d1
+数据：List(Elements(1,abcdefg), Elements(3,abcdefg))
+核对结果为： true
+
+注意字符串不能求sum，遇到sum直接返回false，但是可以进行字符串拼接，如下
+
+示例六、字符串拼接比较
+规则：d3=d1d2
+数据：List(Elements(1,abcdefg), Elements(2,wxyz), Elements(3,abcdefgwxyz))
+核对结果为： true
+
+这里的规则暂时写成d1d2的形式，中间没有+号，后续会改造成和数字型的相统一。
+
+
+示例七、多个条件或关系
+规则：d3=d1||d3=d2
+数据：List(Elements(1,12), Elements(2,23), Elements(3,12))
+核对结果为： true
+
+示例八、多个条件与关系
+规则：d3=d1&&d3=d2
+数据：List(Elements(1,12), Elements(2,23), Elements(3,12))
+核对结果为： false
+
+或和与可以支持任意多规则的组合，也支持任意数字，字符类型规则的组合。
+但是现在只支持同为或，或者同为与的情况，比如对规则d1&&d2||d3这种不能支持。
+
+后续会改造成支持与或同时出现的情况。
